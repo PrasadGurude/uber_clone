@@ -84,7 +84,7 @@ module.exports.logoutUser = async (req, res, next) => {
         const token = req.cookies.token || req.headers.authorization?.split(' ')[ 1 ];
         await blackListTokenModel.create({ token });
            
-        res.status(200).json({ message: 'Logout successfully' });
+        res.status(200).json({ message: 'Loged out successfully' });
     } catch (e) {
         console.log(e);
         res.status(400).json({ message: 'Logout failed' });
