@@ -39,27 +39,27 @@ module.exports.registerCaptain = async (req, res) => {
     }
 }
 
-// module.exports.loginCaptain = async (req, res) => {
-//     try {
-//         const errors = validationResult(req);
-//         if (!errors.isEmpty()) {
-//             return res.status(400).json({ errors: errors.array() });
-//         }
-//         let captain = await captainModel.findOne({ email: req.body.email });
-//         if (!captain) {
-//             return res.status(400).send('Invalid email or password');
-//         }
-//         let validPassword = await captain.comparePassword(req.body.password);
-//         if (!validPassword) {
-//             return res.status(400).send('Invalid email or password');
-//         }
-//         let token = captain.generateAuthToken();
-//         res.status(200).send({ token });
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send('Error logging in captain');
-//     }
-// }
+module.exports.loginCaptain = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+        let captain = await captainModel.findOne({ email: req.body.email }).select('+password');
+        if (!captain) {
+            return res.status(400).send('Invalid email or password');
+        }
+        let validPassword = await captain.comparePassword(req.body.password);
+        if (!validPassword) {
+            return res.status(400).send('Invalid email or password');
+        }
+        let token = captain.generateAuthToken();
+        res.status(200).send({ token , captain });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error logging in captain');
+    }
+}
 
 // module.exports.getCaptainProfile = async (req, res) => {
 //     try {

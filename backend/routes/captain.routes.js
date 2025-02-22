@@ -13,10 +13,10 @@ router.post('/register', [
     body('vehicle.vehicleType').isIn(['car', 'motorcycle', 'auto']).withMessage('Invalid vehicle type'),
 ], captainController.registerCaptain)
 
-// router.post('/login', [
-//     body('email').isEmail().withMessage('Please enter a valid email'),
-//     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
-// ], captainController.loginCaptain)
+router.post('/login', [
+    body('email').isEmail().withMessage('Please enter a valid email'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
+], captainController.loginCaptain)
 
 // router.get('/profile', captainController.getCaptainProfile)
 // router.get('/logout', captainController.logoutCaptain)
