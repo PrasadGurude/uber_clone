@@ -10,15 +10,23 @@ const UserSignup = () => {
   const [userData, setUserData] = useState({})
 
   useEffect(() => {
-    if (userData.email && userData.password && userData.firstname && userData.lastname) {
-      console.log(userData)
+    if (userData.email && userData.password && userData.fullname.firstname && userData.fullname.lastname) {
+      console.log("useeff",userData)
     }
+    console.log("hi")
   }, [userData])
 
 
   const handleUserSubmit = async (e) => {
     e.preventDefault()
-    setUserData({ firstname, lastname, email, password })
+    setUserData({
+      fullname: {
+        firstname,
+        lastname
+      },
+      email,
+      password
+    })
     setEmail('');
     setPassword('');
     setFirstname('');
@@ -47,32 +55,36 @@ const UserSignup = () => {
         <div className='  flex flex-col  pt-8 '>
           <img className=' w-20 ml-8 mb-5' src="https://logos-world.net/wp-content/uploads/2020/05/Uber-Emblem.png" alt="" />
           <div className=' pb-7 py-3 px-4 '>
-            <h2 className='text-2xl font-bold '>Get Started with Uber</h2>
+            <h3 className='pt-3 text-xl font-bold'>What's your name</h3>
             <div className='flex gap-4'>
               <input
                 type="text"
-                className='w-full bg-gray-100 py-3 px-2 rounded mt-3'
+                className='w-full bg-gray-100 py-3 px-2 rounded mb-5'
                 placeholder='Firstname'
+                value={firstname}
                 required
                 onChange={handleFirstnameChange}
               />
               <input
                 type="text"
-                className='w-full bg-gray-100 py-3 px-2 rounded mt-3'
+                className='w-full bg-gray-100 py-3 px-2 rounded mb-5'
                 placeholder='Lastname'
+                value={lastname}
                 required
                 onChange={handleLastnameChange}
               />
             </div>
+            <h3 className='pb-1 text-xl font-bold'>Enter your email </h3>
             <input
-              className='w-full bg-gray-100 py-3 px-2 rounded mt-5'
+              className='w-full bg-gray-100 py-3 px-2 rounded mb-5'
               type="email"
               placeholder='Email'
               required
               onChange={handleEmailChange}
               value={email} />
+            <h3 className='pb-1 text-xl font-bold'>Enter password </h3>
             <input
-              className='w-full bg-gray-100 py-3 px-2 rounded mt-5'
+              className='w-full bg-gray-100 py-3 px-2 rounded mb-5'
               type="password"
               placeholder='Password'
               required
@@ -84,8 +96,8 @@ const UserSignup = () => {
         </div>
       </form>
       <div className='py-3 px-4 pb-5'>
-        <Link to={'/captain-signup'} className='w-full flex justify-center items-center bg-yellow-400 text-white py-3 rounded mt-5 hover:bg-neutral-950 mb-2' >
-          Sign up as Captain</Link>
+      <p className='text-[10px] leading-tight'>This site is protected by reCAPTCHA and the <span className='underline'>Google Privacy
+      Policy</span> and <span className='underline'>Terms of Service apply</span>.</p>
       </div>
     </div>
   )
