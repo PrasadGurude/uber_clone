@@ -52,6 +52,7 @@ const Captainlogin = () => {
               className='w-full bg-gray-100 py-3 px-2 rounded mt-5'
               type="password"
               placeholder='Password'
+              minLength={6}
               required 
               onChange={handlePasswordChange}
               value={password}/>

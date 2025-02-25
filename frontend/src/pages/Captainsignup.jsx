@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { CaptainDataContext } from '../context/CaptainContext'
+import axios from 'axios'
 
 const Captainsignup = () => {
+
+  const navigate = useNavigate()
 
   const { captain, setCaptain } = useContext(CaptainDataContext)
 
@@ -17,10 +20,24 @@ const Captainsignup = () => {
 
   const handleUserSubmit = async (e) => {
     e.preventDefault()
-    const captainData = { email, password, firstname, lastname }
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/captains/signup`, captainData)
+   try {
+    const captainData = {
+      fullname: {
+        firstname,
+        lastname
+      },
+      email,
+      password,
+      vehicle: {
+        color:vehicleColor,
+        plate:vehiclePlate,
+        capacity:Number(vehicleCapacity),
+        vehicleType:vehicleType
+      }
+    }
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData)
 
-    if (response.status === 201) {
+    if (response.status === 200) {
       const data = response.data;
       setCaptain(data.captain);
       localStorage.setItem('token', data.token);
@@ -30,6 +47,14 @@ const Captainsignup = () => {
     setPassword('');
     setFirstname('');
     setLastname('');
+    setVehicleCapacity('')
+    setVehicleColor('')
+    setVehiclePlate('')
+    setVehicleType('')
+   } catch (error) {
+    console.error("Signup failed:", error.response?.data.errors );
+      alert(error.response?.data?.errors[0].msg);
+   }
   }
 
   const handleEmailChange = (e) => {
@@ -61,6 +86,7 @@ const Captainsignup = () => {
                 className='w-full bg-gray-100 py-2 px-2 rounded mb-3'
                 placeholder='Firstname'
                 value={firstname}
+                minLength={3}
                 required
                 onChange={handleFirstnameChange}
               />
@@ -87,24 +113,30 @@ const Captainsignup = () => {
               type="password"
               placeholder='Password'
               required
+              minLength={6}
               onChange={handlePasswordChange}
               value={password} />
             <div>
               <h3 className='pb-1 text-xl font-bold'>Vehicle Details</h3>
               <div className='flex gap-4'>
-                <input
-                  type="text"
-                  className='w-full bg-gray-100 py-2 px-2 rounded mb-4'
-                  placeholder='Vehicle Color'
-                  value={vehicleColor}
+                <select
                   required
-                  onChange={(e) => setVehicleColor(e.target.value)}
-                />
+                  className='w-full bg-gray-100 py-2 px-2 rounded mb-4'
+                  value={vehicleType}
+                  onChange={(e) => {
+                    setVehicleType(e.target.value)
+                  }}>
+                  <option value='' disabled>Select the type</option>
+                  <option value="car">Car</option>
+                  <option value="auto">Auto</option>
+                  <option value="motorcycle">motorcycle</option>
+                </select>
                 <input
                   type="text"
                   className='w-full bg-gray-100 py-2 px-2 rounded mb-4'
                   placeholder='Vehicle Plate'
                   value={vehiclePlate}
+                  minLength={3}
                   required
                   onChange={(e) => setVehiclePlate(e.target.value)}
                 />
@@ -122,10 +154,11 @@ const Captainsignup = () => {
                 <input
                   type="text"
                   className='w-full bg-gray-100 py-2 px-2 rounded mb-4'
-                  placeholder='Vehicle Type'
-                  value={vehicleType}
+                  placeholder='Vehicle Color'
+                  value={vehicleColor}
+                  minLength={3}
                   required
-                  onChange={(e) => setVehicleType(e.target.value)}
+                  onChange={(e) => setVehicleColor(e.target.value)}
                 />
               </div>
             </div>
