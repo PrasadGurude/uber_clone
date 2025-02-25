@@ -41,7 +41,7 @@ const Captainsignup = () => {
       const data = response.data;
       setCaptain(data.captain);
       localStorage.setItem('token', data.token);
-      navigate('/home')
+      navigate('/captain-home')
     }
     setEmail('');
     setPassword('');
@@ -52,7 +52,7 @@ const Captainsignup = () => {
     setVehiclePlate('')
     setVehicleType('')
    } catch (error) {
-    console.error("Signup failed:", error.response?.data.errors );
+    console.error("Signup failed:", error.response?.data );
       alert(error.response?.data?.errors[0].msg);
    }
   }

@@ -4,11 +4,11 @@ export const CaptainDataContext = createContext()
 
 const CaptainContext = ({children}) => {
     const [captain, setCaptain] = useState('')
-    const [isloading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
   return (
     <div>
-    <CaptainDataContext.Provider value={{ captain, setCaptain, isloading, setIsLoading, error, setError }}>
+    <CaptainDataContext.Provider value={{ captain, setCaptain, isLoading, setIsLoading, error, setError }}>
         {children}
     </CaptainDataContext.Provider>
     </div>
