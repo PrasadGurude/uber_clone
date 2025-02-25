@@ -90,8 +90,8 @@ const Captainsignup = () =>  {
               required
               onChange={handlePasswordChange}
               value={password} />
-            <button className='w-full flex justify-center items-center bg-neutral-900 text-white py-3 rounded mt-5 hover:bg-neutral-950 mb-2'>Signup</button>
-            <p> already have account  ? <Link to={'/login'} className='text-blue-600'>Login</Link></p>
+            <button className='w-full flex justify-center items-center bg-yellow-400 text-white py-3 rounded-lg mt-5 hover:bg-neutral-950 mb-2'>Signup as Captain</button>
+            <p> already have account  ? <Link to={'/captain-login'} className='text-blue-600'>Login</Link></p>
           </div>
         </div>
       </form>

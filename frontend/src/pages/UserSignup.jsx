@@ -1,38 +1,55 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { Link ,useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { UserDataContext } from '../context/UserContext.jsx'
 
 const UserSignup = () => {
+
+  const navigate = useNavigate()
+
+  const { user, setUser } = useContext(UserDataContext)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [firstname, setFirstname] = useState('')
   const [lastname, setLastname] = useState('')
-  const [userData, setUserData] = useState({})
-
-  useEffect(() => {
-    if (userData.email && userData.password && userData.fullname.firstname && userData.fullname.lastname) {
-      console.log("useeff",userData)
-    }
-    console.log("hi")
-  }, [userData])
-
 
   const handleUserSubmit = async (e) => {
     e.preventDefault()
-    setUserData({
+    if (!firstname || !email || !password) {
+      alert("All fields are required!");
+      return;
+    }
+    const newUser = {
       fullname: {
         firstname,
         lastname
       },
-      email,
+      email:email.toLowerCase(),
       password
-    })
-    setEmail('');
-    setPassword('');
-    setFirstname('');
-    setLastname('');
-  }
+    }
 
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser);
+  
+      if (response.status === 201) {
+        const data = response.data;
+        setUser(data.user);
+        localStorage.setItem("token", data.token);
+        navigate("/home");
+        
+        // Reset form fields
+        setEmail("");
+        setPassword("");
+        setFirstname("");
+        setLastname("");
+      }
+    } catch (error) {
+      console.error("Signup failed:", error.response?.data );
+      alert(error.response?.data?.errors[0].msg);
+    }
+  };
+  
   const handleEmailChange = (e) => {
     setEmail(e.target.value)
   }
@@ -61,6 +78,7 @@ const UserSignup = () => {
                 type="text"
                 className='w-full bg-gray-100 py-3 px-2 rounded mb-5'
                 placeholder='Firstname'
+                minLength={3}
                 value={firstname}
                 required
                 onChange={handleFirstnameChange}
@@ -87,6 +105,7 @@ const UserSignup = () => {
               className='w-full bg-gray-100 py-3 px-2 rounded mb-5'
               type="password"
               placeholder='Password'
+              minLength={6}
               required
               onChange={handlePasswordChange}
               value={password} />

@@ -1,22 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { UserDataContext } from '../context/UserContext';
+import axios from 'axios';
 
 const UserLogin = () => {
 
+  const navigate = useNavigate();
+
+  const {user , setUser} = useContext(UserDataContext)
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [userData, setUserData] = useState({})
-
-  useEffect(() => {
-    if(userData.email && userData.password){
-      console.log(userData)
-    }
-  }, [userData])
-  
 
   const handleUserSubmit =async (e) => {
     e.preventDefault()
-    setUserData({email, password})
+    const userData = {email, password}
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userData)
+
+    if(response.status === 200){
+      const data = response.data;
+      setUser(data.user);
+      localStorage.setItem('token', data.token);
+      navigate('/home')
+    }
     setEmail('');
     setPassword('');
   }
@@ -50,13 +56,13 @@ const UserLogin = () => {
               required 
               onChange={handlePasswordChange}
               value={password}/>
-            <button className='w-full flex justify-center items-center bg-neutral-900 text-white py-3 rounded mt-5 hover:bg-neutral-950 mb-2'>Login</button>
+            <button className='w-full flex justify-center items-center bg-neutral-900 text-white py-3 rounded-lg mt-5 hover:bg-neutral-950 mb-2'>Login</button>
             <p>New here ? <Link to={'/signup'} className='text-blue-600'>create New Account</Link></p>
           </div>
         </div>
       </form>
       <div className='py-3 px-4 pb-5'>
-        <Link to={'/captain-login'} className='w-full flex justify-center items-center bg-yellow-400 text-white py-3 rounded mt-5 hover:bg-neutral-950 mb-2' >
+        <Link to={'/captain-login'} className='w-full flex justify-center items-center bg-yellow-400 text-white py-3 rounded-lg mt-5 hover:bg-neutral-950 mb-2' >
           Sign in as Captain</Link>
       </div>
     </div>
