@@ -36,7 +36,7 @@ module.exports.registerCaptain = async (req, res) => {
         return res.status(200).json({ token , captain });
     } catch (error) {
         console.log(error);
-        res.status(500).json({messate:'Error registering captain'});
+        res.status(500).json({message:'Error registering captain'});
     }
 }
 
