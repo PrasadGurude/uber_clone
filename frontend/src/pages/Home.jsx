@@ -107,7 +107,7 @@ const Home = () => {
       <div className='h-screen w-screen '>
         <img className='h-full ' src="https://uploads.disquscdn.com/images/abf0ee2a43831d4bafc38d5d4e8671317af55edb03da2cc27b786a1ea2d8bb81.png" alt="" />
       </div>
-      <div className='flex flex-col justify-end h-screen absolute  top-0 w-full'>
+      <div className='flex flex-col justify-end h-screen absolute  top-0 w-full'> 
         <div className='bg-white px-6 py-2 h-[30%] relative '>
           <h5
             ref={panelCloseRef}
