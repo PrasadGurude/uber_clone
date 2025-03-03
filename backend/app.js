@@ -5,7 +5,8 @@ const app = express();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const connectToDb = require('./db/db');
-const userRouter = require('./routes/user.routes');
+const userRoutes = require('./routes/user.routes');
+const mapsRoutes = require('./routes/maps.routes');
 const captainRoutes = require('./routes/captain.routes');
 
 connectToDb();
@@ -19,7 +20,8 @@ app.get('/',(req,res)=>{
     res.send('Hellow World')
 })
 
-app.use('/users',userRouter);
+app.use('/users',userRoutes);
 app.use('/captains',captainRoutes);
+app.use('/maps',mapsRoutes);
 
 module.exports = app;
