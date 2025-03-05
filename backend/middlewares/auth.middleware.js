@@ -26,7 +26,7 @@ module.exports.authUser = async (req, res, next) => {
         req.user = user;
         return next();
     } catch (e) {
-        res.status(401).send({ message: '4Unauthenticate' });
+        res.status(401).send({ message: '4Unauthenticate',e });
     }
 }
 
