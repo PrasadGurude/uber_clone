@@ -21,33 +21,114 @@ module.exports.getAddressCoordinate = async (address) => {
     }
 };
 
-module.exports.getDistanceTime = async (origin, destination) => {
-    if (!origin || !destination) {
-        throw new Error('Origin and destination are required');
+const geocodeAddress = async (address, apiKey) => {
+    const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+    try {
+        const geocodingResponse = await axios.get(geocodingUrl);
+        if (geocodingResponse.data.status === 'OK' && geocodingResponse.data.results.length > 0) {
+            const location = geocodingResponse.data.results[0].geometry.location;
+            return { lat: location.lat, lng: location.lng };
+        } else {
+            console.error('Geocoding failed:', geocodingResponse.data.status, geocodingResponse.data.error_message);
+            throw new Error(`Geocoding failed for address: ${address}`);
+        }
+    } catch (error) {
+        console.error('Geocoding API request failed:', error);
+        throw new Error(`Geocoding API request failed for address: ${address}`);
     }
+};
 
+
+module.exports.getDistanceTime = async (originAddress, destinationAddress, travelMode = 'DRIVE') => {
     const apiKey = process.env.GOOGLE_MAPS_API;
 
-    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(origin)}&destinations=${encodeURIComponent(destination)}&key=${apiKey}`;
+    // Geocode the addresses
+    const origin = await geocodeAddress(originAddress, apiKey);
+    const destination = await geocodeAddress(destinationAddress, apiKey);
+
+    //Check for errors after geocoding.
+    if (!origin || !destination) {
+        throw new Error("Geocoding failed for one or both addresses");
+    }
+
+    const baseUrl = 'https://routes.googleapis.com/directions/v2:computeRoutes';
 
     try {
+        const response = await axios.post(baseUrl, {
+            origin: {
+                location: {
+                    latLng: {
+                        latitude: origin.lat,
+                        longitude: origin.lng,
+                    },
+                },
+            },
+            destination: {
+                location: {
+                    latLng: {
+                        latitude: destination.lat,
+                        longitude: destination.lng,
+                    },
+                },
+            },
+            travelMode: travelMode.toUpperCase(), // Ensure consistent capitalization
+            routingPreference: 'TRAFFIC_AWARE', //Optional, but recommended for driving
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Goog-Api-Key': apiKey,
+                'X-Goog-FieldMask': 'routes.duration,routes.distanceMeters',
+            },
+        });
 
-        const response = await axios.get(url);
-        console.log(response);
-        
-        console.log("1234567:-",response.data.status)
-        if (response.data.status === 'OK') {
-            if (response.data.rows[ 0 ].elements[ 0 ].status === 'ZERO_RESULTS') {
-                throw new Error('No routes found');
-            }
-
-            return response.data.rows[ 0 ].elements[ 0 ];
+        if (response.data.routes && response.data.routes.length > 0) {
+            const route = response.data.routes[0];
+            return {
+                distanceMeters: route.distanceMeters,
+                durationSeconds: route.duration,
+            };
         } else {
-            throw new Error('Unable to fetch distance and time');
+            const errorDetails = response.data.error || "No routes found";
+            throw new Error(`Route calculation failed: ${errorDetails}`);
         }
-
-    } catch (err) {
-        console.error(err);
-        throw err;
+    } catch (error) {
+        console.error('Error fetching route:', error.response ? error.response.data : error);
+        if (error.response && error.response.status === 403) {
+            throw new Error('Invalid API Key or insufficient permissions.');
+        }
+        throw new Error('Failed to calculate distance and time.');
     }
-}
+};
+
+
+
+// module.exports.getDistanceTime = async (origin, destination) => {
+//     if (!origin || !destination) {
+//         throw new Error('Origin and destination are required');
+//     }
+
+//     const apiKey = process.env.GOOGLE_MAPS_API;
+
+//     const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(origin)}&destinations=${encodeURIComponent(destination)}&key=${apiKey}`;
+
+//     try {
+
+//         const response = await axios.get(url);
+//         console.log(response);
+        
+//         console.log("1234567:-",response.data.status)
+//         if (response.data.status === 'OK') {
+//             if (response.data.rows[ 0 ].elements[ 0 ].status === 'ZERO_RESULTS') {
+//                 throw new Error('No routes found');
+//             }
+
+//             return response.data.rows[ 0 ].elements[ 0 ];
+//         } else {
+//             throw new Error('Unable to fetch distance and time');
+//         }
+
+//     } catch (err) {
+//         console.error(err);
+//         throw err;
+//     }
+// }
