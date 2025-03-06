@@ -1,5 +1,6 @@
 const rideModel = require('../models/ride.model');
 const mapsService = require('./maps.service');
+const crypto = require('crypto');
 
 
 async function getFare(origin, destination) {
@@ -11,19 +12,19 @@ async function getFare(origin, destination) {
     const baseFare = {
         car: 50,
         auto: 30,
-        motorcycle: 20
+        moto: 20
     };
 
     const perKmRate = {
         car: 10,
         auto: 5,
-        motorcycle: 3
+        moto: 3
     };
 
     const perMinuteRate = {
         car: 2,
         auto: 1,
-        motorcycle: 0.5
+        moto: 0.5
     };
 
     const distance = parseFloat(distanceTime.distance);
@@ -35,11 +36,18 @@ async function getFare(origin, destination) {
     const fare = {
         car: baseFare.car + (perKmRate.car * distanceInKm) + (perMinuteRate.car * durationInMinutes),
         auto: baseFare.auto + (perKmRate.auto * distanceInKm) + (perMinuteRate.auto * durationInMinutes),
-        motorcycle: baseFare.motorcycle + (perKmRate.motorcycle * distanceInKm) + (perMinuteRate.motorcycle * durationInMinutes)
+        moto: baseFare.moto + (perKmRate.moto * distanceInKm) + (perMinuteRate.moto * durationInMinutes)
     };
-
     return fare;
 
+}
+
+async function getOtp(num) {
+    function generateOtp(num) {
+        const otp = crypto.randomInt(Math.pow(10, num - 1), Math.pow(10, num)).toString();
+        return otp;
+    }
+    return generateOtp(num);
 }
 
 module.exports.createRide = async ({userId , origin , destination , vehicleType}) => {
@@ -54,6 +62,7 @@ module.exports.createRide = async ({userId , origin , destination , vehicleType}
             user: userId,
             origin,
             destination,
+            otp: await getOtp(6),
             fare: fare[vehicleType],
         });
     
