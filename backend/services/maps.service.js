@@ -84,8 +84,8 @@ module.exports.getDistanceTime = async (originAddress, destinationAddress, trave
         if (response.data.routes && response.data.routes.length > 0) {
             const route = response.data.routes[0];
             return {
-                distanceMeters: route.distanceMeters,
-                durationSeconds: route.duration,
+                distance: route.distanceMeters,
+                duration: route.duration.replace('s', ''),
             };
         } else {
             const errorDetails = response.data.error || "No routes found";
