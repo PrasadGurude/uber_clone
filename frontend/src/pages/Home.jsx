@@ -19,11 +19,12 @@ const Home = () => {
   const [confirmRidePanel, setConfirmRidePanel] = useState(false)
   const [vehicleFound, setVehicleFound] = useState(false)
   const [waitingForDriver, setWaitingForDriver] = useState(false)
-  const [ activeField, setActiveField ] = useState(null)
+  const [activeField, setActiveField] = useState(null)
   const [pickupSuggestions, setPickupSuggestions] = useState([])
   const [destinationSuggestions, setDestinationSuggestions] = useState([])
-
-
+  const [fare, setFare] = useState({})
+  const [distanceTime, setDistanceTime] = useState({})
+  const [vehicleType, setVehicleType] = useState(null)
 
   const panelRef = useRef(null)
   const panelCloseRef = useRef(null)
@@ -71,7 +72,7 @@ const Home = () => {
     if (panelOpen) {
       gsap.to(panelRef.current, {
         height: '70%',
-        padding: '24'
+        padding: '24',
         // opacity:1
       })
       gsap.to(panelCloseRef.current, {
@@ -137,7 +138,39 @@ const Home = () => {
     }
   }, [waitingForDriver])
 
+  async function findTrip() {
+    if (pickup && destination) {
+      setVehiclePanel(true)
+      setPanelOpen(false)
+      const fare = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
+        params: { pickup, destination },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
 
+      const distanceTime = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-distance-time`, {
+        params: { origin: pickup, destination: destination },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      setFare(fare.data)
+      setDistanceTime(distanceTime.data)
+    }
+  }
+
+  async function createRide() {
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
+      pickup,
+      destination,
+      vehicleType
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+  }
   return (
     <div className='h-screen relative overflow-hidden'>
       <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="uber_logo" />
@@ -145,7 +178,7 @@ const Home = () => {
         <img className='h-full ' src="https://uploads.disquscdn.com/images/abf0ee2a43831d4bafc38d5d4e8671317af55edb03da2cc27b786a1ea2d8bb81.png" alt="" />
       </div>
       <div className='flex flex-col justify-end h-screen absolute  top-0 w-full'>
-        <div className='bg-white px-6 py-2 h-[30%] relative '>
+        <div className='bg-white px-6 pb-2 pt-1 h-[30%] relative '>
           <h5
             ref={panelCloseRef}
             onClick={() => {
@@ -158,7 +191,7 @@ const Home = () => {
           <form onSubmit={(e) => {
             submitHandler(e)
           }}>
-            <div className='line absolute h-12 w-1 top-[50%] bg-gray-800 rounded-2xl left-10'></div>
+            <div className='line absolute h-12 w-1 top-[38%] bg-gray-800 rounded-2xl left-12'></div>
             <input
               onClick={() => {
                 setActiveField('pickup')
@@ -166,7 +199,7 @@ const Home = () => {
               }}
               value={pickup}
               onChange={handlePickupChange}
-              className='w-full bg-gray-100 py-3 px-12 rounded-lg mt-3'
+              className='w-full bg-gray-100 py-3 px-12 rounded-lg mt-1'
               type="text"
               placeholder='Add a pick-up location' />
             <input
@@ -174,14 +207,19 @@ const Home = () => {
                 setActiveField('destination')
                 setPanelOpen(true)
               }}
-              className='w-full bg-gray-100 py-3 px-12 rounded-lg mt-5 '
+              className='w-full bg-gray-100 py-3 px-12 rounded-lg mt-3 '
               type="text"
               placeholder='Enter your destination'
               value={destination}
               onChange={handleDestinationChange} />
           </form>
+          <button
+            onClick={findTrip}
+            className='bg-black text-white py-2 rounded-lg mt-3 w-full'>
+            find a trip
+          </button>
         </div>
-        <div ref={panelRef} className='bg-white  '>
+        <div ref={panelRef} className='bg-white '>
           <LocationSearchPanel
             suggestions={activeField === 'pickup' ? pickupSuggestions : destinationSuggestions}
             setPanelOpen={setPanelOpen}
@@ -195,19 +233,40 @@ const Home = () => {
         </div>
       </div>
       <div ref={vehiclePanelRef} className='fixed w-full  z-10 bottom-0 translate-y-full px-2 py-8 bg-white '>
-        <VehiclePanel setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
+        <VehiclePanel
+          setConfirmRidePanel={setConfirmRidePanel}
+          setVehiclePanel={setVehiclePanel}
+          fare={fare}
+          distanceTime={distanceTime}
+          setVehicleType={setVehicleType}
+        />
       </div>
       <div ref={confirmedRidePanelRef} className='fixed w-full  z-10 bottom-0 translate-y-full  py-6 pt-12 bg-white '>
-        <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
+        <ConfirmRide
+          setConfirmRidePanel={setConfirmRidePanel}
+          setVehicleFound={setVehicleFound}
+          createRide={createRide}
+          pickup={pickup}
+          destination={destination}
+          vehicleType={vehicleType}
+          fare={fare}
+        />
       </div>
       <div ref={vehicleFoundRef} className='fixed w-full  z-10 bottom-0 translate-y-full  py-6 pt-12 bg-white pb-10 '>
-        <LookingForDriver setVehicleFound={setVehicleFound} />
+        <LookingForDriver
+          setVehicleFound={setVehicleFound}
+          fare={fare}
+          pickup={pickup}
+          destination={destination}
+          vehicleType={vehicleType}
+        />
       </div>
       <div ref={waitingForDriverRef} className='fixed w-full  z-10 bottom-0 py-6 pt-12 bg-white pb-10 '>
         <WaitingForDriver setWaitingForDriver={setWaitingForDriver} waitingForDriver={waitingForDriver} />
       </div>
     </div>
   )
+
 }
 
 export default Home

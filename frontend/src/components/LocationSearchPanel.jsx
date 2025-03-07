@@ -15,10 +15,10 @@ const LocationSearchPanel = ({ suggestions, setPanelOpen, setVehiclePanel, setPi
                             } else {
                                 setDestination(locationText);
                             }
-                            if (pickup && destination) {
-                                setVehiclePanel(true);
-                                setPanelOpen(false);
-                            }
+                            // if (pickup && destination) {
+                            //     setVehiclePanel(true);
+                            //     setPanelOpen(false);
+                            // }
                         }} 
                         key={index} 
                         className='border-gray-200 border-2 active:border-black rounded-lg flex flex-row gap-4 mb-2 items-center justify-start px-3 py-2 hover:bg-gray-50 cursor-pointer'
