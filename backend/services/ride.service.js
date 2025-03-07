@@ -50,17 +50,17 @@ async function getOtp(num) {
     return generateOtp(num);
 }
 
-module.exports.createRide = async ({userId , origin , destination , vehicleType}) => {
-    if(!userId || !origin || !destination || !vehicleType){
-        throw new Error('User, origin, destination and vehicle type are required')
+module.exports.createRide = async ({userId , pickup , destination , vehicleType}) => {
+    if(!userId || !pickup || !destination || !vehicleType){
+        throw new Error('User, pickup, destination and vehicle type are required')
     }
 
     try {
-        const fare = await getFare(origin, destination);
+        const fare = await getFare(pickup, destination);
 
         const ride = rideModel.create({
             user: userId,
-            origin,
+            pickup,
             destination,
             otp: await getOtp(6),
             fare: fare[vehicleType],
