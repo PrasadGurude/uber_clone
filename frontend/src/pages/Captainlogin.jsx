@@ -12,23 +12,24 @@ const Captainlogin = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleUserSubmit =async (e) => {
+  const handleUserSubmit = async (e) => {
     e.preventDefault()
     try {
-      const captainData = {email, password}
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captainData)
+      const captainData = { email, password }
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captainData)
 
-    if(response.status === 200){
-      const data = response.data;
-      setCaptain(data.captain);
-      localStorage.setItem('token', data.token);
-      navigate('/captain-home')
-    }
+      if (response.status === 200) {
+        const data = response.data;
+        setCaptain(data.captain);
+        console.log(captain);
+        localStorage.setItem('token', data.token);
+        navigate('/captain-home')
+      }
 
-    setEmail('');
-    setPassword('');
+      setEmail('');
+      setPassword('');
     } catch (error) {
-      console.error("Signup failed:", error.response?.data );
+      console.error("Signup failed:", error.response?.data);
       alert(error.response?.data?.errors[0].msg);
     }
   }
@@ -60,9 +61,9 @@ const Captainlogin = () => {
               type="password"
               placeholder='Password'
               minLength={6}
-              required 
+              required
               onChange={handlePasswordChange}
-              value={password}/>
+              value={password} />
             <button className='w-full flex justify-center items-center bg-yellow-400 text-white py-3 rounded-lg mt-5 hover:bg-neutral-950 mb-2'>Login</button>
             <p>Join the fleet by <Link to={'/captain-signup'} className='text-blue-600'>create New Account as Captain</Link></p>
           </div>

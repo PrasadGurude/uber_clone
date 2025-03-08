@@ -118,6 +118,7 @@ const Home = () => {
     if (vehicleFound) {
       gsap.to(vehicleFoundRef.current, {
         transform: 'translateY(0)'
+
       })
     } else {
       gsap.to(vehicleFoundRef.current, {
@@ -241,7 +242,7 @@ const Home = () => {
           setVehicleType={setVehicleType}
         />
       </div>
-      <div ref={confirmedRidePanelRef} className='fixed w-full  z-10 bottom-0 translate-y-full  py-6 pt-12 bg-white '>
+      <div ref={confirmedRidePanelRef} className='fixed w-full  z-10 bottom-0 translate-y-full pt-8 pb-8 bg-white '>
         <ConfirmRide
           setConfirmRidePanel={setConfirmRidePanel}
           setVehicleFound={setVehicleFound}
@@ -252,9 +253,10 @@ const Home = () => {
           fare={fare}
         />
       </div>
-      <div ref={vehicleFoundRef} className='fixed w-full  z-10 bottom-0 translate-y-full  py-6 pt-12 bg-white pb-10 '>
-        <LookingForDriver
+      <div ref={vehicleFoundRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-7'>
+      <LookingForDriver
           setVehicleFound={setVehicleFound}
+          createRide={createRide}
           fare={fare}
           pickup={pickup}
           destination={destination}
@@ -262,7 +264,10 @@ const Home = () => {
         />
       </div>
       <div ref={waitingForDriverRef} className='fixed w-full  z-10 bottom-0 py-6 pt-12 bg-white pb-10 '>
-        <WaitingForDriver setWaitingForDriver={setWaitingForDriver} waitingForDriver={waitingForDriver} />
+        <WaitingForDriver
+          setWaitingForDriver={setWaitingForDriver}
+          waitingForDriver={waitingForDriver}
+        />
       </div>
     </div>
   )

@@ -2,10 +2,10 @@ import React from 'react'
 
 const LookingForDriver = ({ setVehicleFound, pickup, destination, vehicleType, fare }) => {
     return (
-        <div className=''>
+        <div className='h-[73vh] '>
             <h5
                 onClick={() => setVehicleFound(false)}
-                className='absolute top-0 right-3 text-2xl cursor-pointer'>
+                className='absolute top-1 right-3 text-2xl cursor-pointer'>
                 <i className="ri-arrow-down-wide-fill"></i>
             </h5>
             <h3 className='text-2xl font-semibold mb-3 px-4'>Looking for a Driver</h3>
@@ -42,11 +42,11 @@ const LookingForDriver = ({ setVehicleFound, pickup, destination, vehicleType, f
                     </div>
                 </div>
 
-                <div className='w-full px-4 mt-4'>
-                    <div className='bg-gray-100 rounded-lg p-4 text-center'>
+                <div className='w-full px-4 mt-2'>
+                    <div className='bg-gray-100 rounded-lg p-2 text-center'>
                         <div className='animate-pulse'>
                             <div className='text-lg font-semibold'>Finding your driver...</div>
-                            <div className='text-sm text-gray-500 mt-2'>This may take a few moments</div>
+                            <div className='text-sm text-gray-500 mt-1'>This may take a few moments</div>
                         </div>
                     </div>
                 </div>
