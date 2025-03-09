@@ -8,7 +8,7 @@ const CaptainDetails = () => {
             <div className='flex justify-between px-2 py-1 mb-2 border-b-1 border-gray-300'>
                 <div className='flex items-center gap-2'>
                     <img className='h-15 p-2 bg-gray-100 rounded-full  ' src="https://th.bing.com/th/id/OIP.qSzcbkUC_fFYizN0IpcT8wHaK_?rs=1&pid=ImgDetMain" alt="" />
-                    <h4 className='text-xl font-medium'>{captain.fullname}</h4>
+                    <h4 className='text-xl font-medium'>{captain.fullname.firstname + " " + captain.fullname.lastname}</h4>
                 </div>
 
                 <div>

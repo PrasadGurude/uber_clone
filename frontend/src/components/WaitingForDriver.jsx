@@ -8,7 +8,7 @@ const WaitingForDriver = (props) => {
           props.setWaitingForDriver(false)
         }}
         className='absolute top-0 right-3  text-2xl '>
-        <i className="ri-arrow-down-wide-fill"></i>
+        <i className="ri-arrow-down-wide-fill "></i>
       </h5>
       <div className='flex items-center justify-between p-5'>
         <img className='h-10 ' src="https://www.asaproadworthys.com.au/wp-content/uploads/2021/11/Select-768x431.jpeg" alt="" />

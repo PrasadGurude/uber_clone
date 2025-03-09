@@ -8,7 +8,7 @@ const RidePopUp = (props) => {
                     props.setridePopupPanel(false)
                 }}
                 className='absolute top-0 right-3  text-2xl '>
-                <i className="ri-arrow-down-wide-fill"></i>
+                <i className="ri-arrow-down-wide-fill "></i>
             </h5>
             <h3 className='text-2xl font-semibold mb-3 px-4'>New Ride Available!</h3>
             <div className='px-4 flex items-center justify-between mb-3 bg-yellow-400 rounded-lg py-2'>
