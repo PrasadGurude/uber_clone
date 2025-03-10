@@ -12,7 +12,7 @@ const ConfirmRide = ({ setConfirmRidePanel, setVehicleFound, createRide, pickup,
     }
 
     return (
-        <div className='h-[65vh]'>
+        <div className='h-[69vh]'>
             <h5
                 onClick={() => setConfirmRidePanel(false)}
                 className='absolute top-0 right-3 text-2xl cursor-pointer'>

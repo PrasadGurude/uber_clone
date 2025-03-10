@@ -4,7 +4,7 @@ const crypto = require('crypto');
 
 
 async function getFare(origin, destination) {
-    if(!origin || !destination){
+    if (!origin || !destination) {
         throw new Error('Origin and destination are required')
     }
 
@@ -29,10 +29,10 @@ async function getFare(origin, destination) {
 
     const distance = parseFloat(distanceTime.distance);
     const duration = parseFloat(distanceTime.duration);
-    
+
     const distanceInKm = distance / 1000;
     const durationInMinutes = duration / 60;
-    
+
     const fare = {
         car: baseFare.car + (perKmRate.car * distanceInKm) + (perMinuteRate.car * durationInMinutes),
         auto: baseFare.auto + (perKmRate.auto * distanceInKm) + (perMinuteRate.auto * durationInMinutes),
@@ -41,6 +41,7 @@ async function getFare(origin, destination) {
     return fare;
 
 }
+
 
 module.exports.getFare = getFare;
 
@@ -52,22 +53,29 @@ async function getOtp(num) {
     return generateOtp(num);
 }
 
-module.exports.createRide = async ({userId , pickup , destination , vehicleType}) => {
-    if(!userId || !pickup || !destination || !vehicleType){
+module.exports.createRide = async ({ userId, pickup, destination, vehicleType }) => {
+    if (!userId || !pickup || !destination || !vehicleType) {
         throw new Error('User, pickup, destination and vehicle type are required')
     }
 
     try {
         const fare = await getFare(pickup, destination);
+        const distanceTime = await mapsService.getDistanceTime(pickup, destination);
+        const distance = parseFloat(distanceTime.distance);
+        const duration = parseFloat(distanceTime.duration);
+
+        const distanceInKm = distance / 1000;
+        const durationInMinutes = duration / 60;
 
         const ride = rideModel.create({
             user: userId,
             pickup,
             destination,
+            distance: (distanceInKm).toFixed(2),
             otp: await getOtp(6),
-            fare: fare[vehicleType],
+            fare: (fare[vehicleType]).toFixed(2),
         });
-    
+
         return ride;
     } catch (error) {
         throw error;
