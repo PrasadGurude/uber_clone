@@ -24,6 +24,8 @@ function initializeSocket(server) {
             } else if (userType === 'captain') {
                 await captainModel.findByIdAndUpdate(userId, { socketId: socket.id });
             }
+            console.log(`User ${userId} joined as ${userType}`);
+            
         });
 
 
@@ -51,6 +53,9 @@ function initializeSocket(server) {
 const sendMessageToSocketId = (socketId, messageObject) => {
 
 console.log(messageObject);
+
+console.log(`Sending message to ${socketId}: ${messageObject}`);
+
 
     if (io) {
         io.to(socketId).emit(messageObject.event, messageObject.data);

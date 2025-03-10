@@ -5,7 +5,7 @@ const RidePopUp = (props) => {
         <div className=''>
             <h5
                 onClick={() => {
-                    props.setridePopupPanel(false)
+                    props.setRidePopupPanel(false)
                 }}
                 className='absolute top-0 right-3  text-2xl '>
                 <i className="ri-arrow-down-wide-fill "></i>
@@ -45,7 +45,7 @@ const RidePopUp = (props) => {
                 </div>
                 <div className='flex justify-around w-full'>
                     <button onClick={() => {
-                        props.setridePopupPanel(false)
+                        props.setRidePopupPanel(false)
                     }} className='bg-gray-300 text-gray-700 py-2 px-10 rounded-lg mt-2 '>Ignore</button>
                     <button onClick={() => {
                         props.setConfirmRidePopupPanel(true)

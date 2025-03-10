@@ -8,9 +8,11 @@ import VehiclePanel from '../components/VehiclePanel'
 import ConfirmRide from '../components/ConfirmRide'
 import LookingForDriver from '../components/LookingForDriver'
 import WaitingForDriver from '../components/WaitingForDriver'
+import { SocketContext } from '../context/SocketContext'
+import { UserDataContext } from '../context/usercontext'
 import { useNavigate } from 'react-router-dom'
 
-const Home = () => {
+const Home = () =>  {
 
   const [pickup, setPickup] = useState('')
   const [destination, setDestination] = useState('')
@@ -33,9 +35,18 @@ const Home = () => {
   const waitingForDriverRef = useRef(null)
   const confirmedRidePanelRef = useRef(null)
 
+  const { socket } = useContext(SocketContext)
+  const { user } = useContext(UserDataContext)
+
+  useEffect(() => { 
+    // socket.on('join', {userType:'user',userId:user._id} )
+    socket.emit('join', { userType: 'user', userId: user._id })
+  }, [])
+  
+
   const submitHandler = (e) => {
     e.preventDefault()
-  }
+  }  
 
   const handlePickupChange = async (e) => {
     setPickup(e.target.value)

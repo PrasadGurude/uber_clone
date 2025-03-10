@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { UserDataContext } from '../context/UserContext';
+import { UserDataContext } from '../context/usercontext';
 import axios from 'axios';
 
 const UserLogin = () => {
@@ -24,7 +24,7 @@ const UserLogin = () => {
       navigate('/home')
     }
     setEmail('');
-    setPassword('');
+    setPassword('');    
   }
 
   const handleEmailChange = (e) => {
