@@ -1,21 +1,25 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const ConfirmRidePopUp = (props) => {
 
     const [otp, setOtp] = useState('')
+    const navigate = useNavigate()
 
-    const submitHandler =async (e)=>{
+    const submitHandler = async (e) => {
         e.preventDefault()
 
         const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/start-ride`, {
-            params: { rideId: ride._id, otp: otp },
+            params: { rideId: props.ride._id, otp: otp },
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         })
-        if(response.status === 200){
+        if (response.status === 200) {
             props.setConfirmRidePopupPanel(false)
+            props.setRidePopupPanel(false)
+            navigate('/captain-riding')
         }
 
     }
@@ -35,7 +39,7 @@ const ConfirmRidePopUp = (props) => {
             <div className='px-4 flex items-center justify-between mb-3 border-yellow-400 border-2 rounded-lg py-2'>
                 <div className='flex items-center gap-3'>
                     <img className='h-15  rounded-full p-2 bg-gray-300' src="https://i.pinimg.com/736x/20/57/2b/20572baabbf418db9cfb52c5026fdce1.jpg" alt="" />
-                    <h2 className='text-xl font-medium '>{props.ride?.user.fullname.firstname+ " "+props.ride?.user.fullname.lastname}</h2>
+                    <h2 className='text-xl font-medium '>{props.ride?.user.fullname.firstname + " " + props.ride?.user.fullname.lastname}</h2>
                 </div>
                 <h5 className='text-lg font-semibold'>{props.ride?.distance}Km</h5>
             </div>
@@ -64,25 +68,24 @@ const ConfirmRidePopUp = (props) => {
 
                 </div>
                 <div className='w-full'>
-                <form onSubmit={(e) => {
-                    submitHandler(e)
-                }}
-                className='flex flex-col w-full p-2'>
-                    <input
-                        type="text"
-                        value={otp}
-                        onChange={(e)=>{
-                            setOtp(e.target.value)
-                        }}
-                        className='w-full bg-gray-100 py-3 px-12 rounded-lg mt-3 text-center font-mono font-semibold'
-                        placeholder='Enter OTP' />
-                    <Link to={'/captain-riding'} onClick={() => {
-                        props.setConfirmRidePopupPanel(false)
-                    }} className='bg-green-500 py-2 text-lg rounded-lg mt-2 text-center '>Confirm</Link>
-                    <button onClick={() => {
-                        props.setConfirmRidePopupPanel(false)
-                    }} className='bg-red-500 text-lg text-white py-2  rounded-lg mt-3 '>Cancle</button>
-                </form>
+                    <form onSubmit={(e) => {
+                        submitHandler(e)
+                    }}
+                        className='flex flex-col w-full p-2'>
+                        <input
+                            type="text"
+                            value={otp}
+                            onChange={(e) => {
+                                setOtp(e.target.value)
+                            }}
+                            className='w-full bg-gray-100 py-3 px-12 rounded-lg mt-3 text-center font-mono font-semibold'
+                            placeholder='Enter OTP' />
+                        <button className='bg-green-500 py-2 text-lg rounded-lg mt-2 text-center '>Confirm</button>
+                        <button onClick={() => {
+                            props.setConfirmRidePopupPanel(false)
+                            props.setRidePopupPanel(false)
+                        }} className='bg-red-500 text-lg text-white py-2  rounded-lg mt-3 '>Cancle</button>
+                    </form>
                 </div>
             </div>
         </div>
