@@ -39,6 +39,8 @@ const Home = () =>  {
   const { socket } = useContext(SocketContext)
   const { user } = useContext(UserDataContext)
 
+  const navigate = useNavigate()
+
   useEffect(() => { 
     // socket.on('join', {userType:'user',userId:user._id} )
     socket.emit('join', { userType: 'user', userId: user._id })
@@ -57,7 +59,7 @@ const Home = () =>  {
 })
 
 socket.on('ride-started', ride => {
-  console.log("ride")
+  console.log(ride)
   setWaitingForDriver(false)
   navigate('/riding', { state: { ride } }) // Updated navigate to include ride data
 })
