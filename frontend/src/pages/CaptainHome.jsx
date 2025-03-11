@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 import CaptainDetails from '../components/CaptainDetails'
 import RidePopUp from '../components/RidePopUp'
 import { useGSAP } from '@gsap/react'
@@ -7,6 +8,7 @@ import gsap from 'gsap'
 import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
 import { CaptainDataContext } from '../context/CaptainContext'
 import { SocketContext } from '../context/SocketContext'
+import { UserDataContext } from '../context/usercontext'
 
 const CaptainHome = () => {
 
@@ -18,6 +20,7 @@ const CaptainHome = () => {
   const confirmRidePopupPanelRef = useRef(null);
 
   const { socket } = useContext(SocketContext)
+  const {user} = useContext(UserDataContext)
   const { captain } = useContext(CaptainDataContext)
 
   useEffect(() => {
@@ -33,7 +36,7 @@ const CaptainHome = () => {
               lng: position.coords.longitude
             }
           })
-        })
+        }) 
       }
     }
 
@@ -74,6 +77,24 @@ const CaptainHome = () => {
     }
   }, [ConfirmRidePopupPanel])
 
+  async function acceptRide() {
+
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, {
+
+        rideId: ride._id,
+        captainId: captain._id,
+
+    }, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+
+    setRidePopupPanel(false)
+    setConfirmRidePopupPanel(true)
+
+}
+
   return (
     <div className='h-screen'>
       <div className='fixed p-3 top-0 flex items-center justify-between w-full'>
@@ -92,12 +113,15 @@ const CaptainHome = () => {
         <RidePopUp 
         setRidePopupPanel={setRidePopupPanel} 
         setConfirmRidePopupPanel={setConfirmRidePopupPanel}
-        setRide={setRide}
+        acceptRide={acceptRide}
         ride={ride}
          />
       </div>
       <div ref={confirmRidePopupPanelRef} className='fixed w-full  z-10 bottom-0 translate-y-full h-screen px-2 py-8 bg-white '>
-        <ConfirmRidePopUp setConfirmRidePopupPanel={setConfirmRidePopupPanel} />
+        <ConfirmRidePopUp 
+        setConfirmRidePopupPanel={setConfirmRidePopupPanel}
+        ride={ride}
+         />
       </div>
     </div>
   )

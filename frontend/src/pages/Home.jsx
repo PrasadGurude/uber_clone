@@ -27,6 +27,7 @@ const Home = () =>  {
   const [fare, setFare] = useState({})
   const [distanceTime, setDistanceTime] = useState({})
   const [vehicleType, setVehicleType] = useState(null)
+  const [ride, setRide] = useState(null)
 
   const panelRef = useRef(null)
   const panelCloseRef = useRef(null)
@@ -47,6 +48,19 @@ const Home = () =>  {
   const submitHandler = (e) => {
     e.preventDefault()
   }  
+
+  socket.on('ride-confirmed', ride => {
+    setVehicleFound(false)
+    setWaitingForDriver(true)
+    setRide(ride)
+    console.log(ride);
+})
+
+socket.on('ride-started', ride => {
+  console.log("ride")
+  setWaitingForDriver(false)
+  navigate('/riding', { state: { ride } }) // Updated navigate to include ride data
+})
 
   const handlePickupChange = async (e) => {
     setPickup(e.target.value)
@@ -182,6 +196,7 @@ const Home = () =>  {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
+    console.log(response.data)
   }
   return (
     <div className='h-screen relative overflow-hidden'>
@@ -274,10 +289,11 @@ const Home = () =>  {
           vehicleType={vehicleType}
         />
       </div>
-      <div ref={waitingForDriverRef} className='fixed w-full  z-10 bottom-0 py-6 pt-12 bg-white pb-10 '>
+      <div ref={waitingForDriverRef} className='fixed w-full  z-10 bottom-0 py-6 pt-10 bg-white pb-10 '>
         <WaitingForDriver
           setWaitingForDriver={setWaitingForDriver}
           waitingForDriver={waitingForDriver}
+          ride={ride}
         />
       </div>
     </div>

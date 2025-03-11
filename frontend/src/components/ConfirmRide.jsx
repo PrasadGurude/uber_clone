@@ -1,14 +1,12 @@
 import React from 'react'
+import axios from 'axios'
 
 const ConfirmRide = ({ setConfirmRidePanel, setVehicleFound, createRide, pickup, destination, vehicleType, fare }) => {
     const handleConfirm = async () => {
-        try {
-            await createRide();
-            setVehicleFound(true);
-            setConfirmRidePanel(false);
-        } catch (error) {
-            console.error('Error creating ride:', error);
-        }
+        setVehicleFound(true);
+        setConfirmRidePanel(false);
+        createRide();
+            
     }
 
     return (

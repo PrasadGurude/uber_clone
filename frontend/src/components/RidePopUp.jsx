@@ -37,7 +37,7 @@ const RidePopUp = (props) => {
                     <div className='flex items-center px-5 pb-2'>
                         <i className="ri-bank-card-2-fill text-lg mr-4"></i>
                         <div>
-                            <h3 className='text-xl font-bold'>₹{(props.ride?.fare).toFixed(2)}</h3>
+                            <h3 className='text-xl font-bold'>₹{(props.ride?.fare ?? 0).toFixed(2)}</h3>
                             <p className='text-sm'>Cash Cash</p>
                         </div>
                     </div>
@@ -48,7 +48,7 @@ const RidePopUp = (props) => {
                         props.setRidePopupPanel(false)
                     }} className='bg-gray-300 text-gray-700 py-2 px-10 rounded-lg mt-2 '>Ignore</button>
                     <button onClick={() => {
-                        props.setConfirmRidePopupPanel(true)
+                        props.acceptRide()                        
                     }} className='bg-green-500 py-2 px-10 rounded-lg mt-2 '>Accept</button>
                 </div>
             </div>
