@@ -9,6 +9,7 @@ import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
 import { CaptainDataContext } from '../context/CaptainContext'
 import { SocketContext } from '../context/SocketContext'
 import { UserDataContext } from '../context/usercontext'
+import LiveTracking from '../components/LiveTracking'
 
 const CaptainHome = () => {
 
@@ -52,6 +53,7 @@ const CaptainHome = () => {
     setRidePopupPanel(true)
 
   })
+
 
   useGSAP(function () {
     if (ridePopupPanel) {
@@ -104,7 +106,7 @@ const CaptainHome = () => {
         </Link>
       </div>
       <div className='h-3/5'>
-        <img className='h-full w-full object-cover' src="https://uploads.disquscdn.com/images/abf0ee2a43831d4bafc38d5d4e8671317af55edb03da2cc27b786a1ea2d8bb81.png" alt="" />
+      <LiveTracking/>
       </div>
       <div className='h-2/5 p-4 '>
         <CaptainDetails />

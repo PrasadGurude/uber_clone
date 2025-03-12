@@ -11,6 +11,7 @@ import WaitingForDriver from '../components/WaitingForDriver'
 import { SocketContext } from '../context/SocketContext'
 import { UserDataContext } from '../context/usercontext'
 import { useNavigate } from 'react-router-dom'
+import LiveTracking from '../components/LiveTracking'
 
 const Home = () =>  {
 
@@ -202,9 +203,9 @@ socket.on('ride-started', ride => {
   }
   return (
     <div className='h-screen relative overflow-hidden'>
-      <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="uber_logo" />
+      <img className='w-16 absolute left-5 top-5 z-10'  src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="uber_logo" />
       <div className='h-screen w-screen '>
-        <img className='h-full ' src="https://uploads.disquscdn.com/images/abf0ee2a43831d4bafc38d5d4e8671317af55edb03da2cc27b786a1ea2d8bb81.png" alt="" />
+      <LiveTracking/>
       </div>
       <div className='flex flex-col justify-end h-screen absolute  top-0 w-full'>
         <div className='bg-white px-6 pb-2 pt-1 h-[30%] relative '>

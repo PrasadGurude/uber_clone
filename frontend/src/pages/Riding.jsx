@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
 import { Link , useLocation, useNavigate} from 'react-router-dom'
 import { SocketContext } from '../context/SocketContext'
+import LiveTracking from '../components/LiveTracking'
 
 const Riding = () => {
     const location = useLocation()
     const ride = location.state.ride
-    const socket  = useContext(SocketContext)
+    const {socket}  = useContext(SocketContext)
     const navigate = useNavigate()
     socket.on('ride-ended', (ride) => {
         console.log(ride)
@@ -13,11 +14,11 @@ const Riding = () => {
       })
     return (
         <div className='h-screen'>
-            <Link to={'/home'} className="fixed w-10 right-2 top-2 h-10 bg-white items-center flex justify-center rounded-full">
+            <Link to={'/home'} className="fixed w-10 right-2 top-2 h-10 bg-white items-center flex justify-center rounded-full z-10">
             <i className="ri-home-4-line text-lg font-semibold"></i>
             </Link>
             <div className='h-1/2'>
-                <img className='h-full w-full object-cover' src="https://uploads.disquscdn.com/images/abf0ee2a43831d4bafc38d5d4e8671317af55edb03da2cc27b786a1ea2d8bb81.png" alt="" />
+            <LiveTracking/>
             </div>
             <div className='h-1/2'>
                 <div className='flex items-center justify-between px-5 py-3'>
