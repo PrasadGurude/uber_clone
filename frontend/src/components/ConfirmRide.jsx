@@ -5,8 +5,7 @@ const ConfirmRide = ({ setConfirmRidePanel, setVehicleFound, createRide, pickup,
     const handleConfirm = async () => {
         setVehicleFound(true);
         setConfirmRidePanel(false);
-        createRide();
-            
+        createRide();   
     }
 
     return (
