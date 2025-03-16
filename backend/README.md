@@ -182,4 +182,34 @@ Authorization: Bearer <token>
 
 ## WebSocket Events
 Real-time communication for ride requests and location updates.
-Documentation coming soon.
+
+## Folder Structure
+
+```
+s:\Development\uber\backend
+│
+├── config         // Environment and configuration files
+├── controllers    // Request handlers for routes
+├── middlewares    // Custom middlewares such as authentication 
+├── models         // Mongoose models and schemas
+├── routes         // API route definitions
+└── utils          // Utility functions and helpers (if any)
+```
+
+## Additional Documentation
+
+### Advanced Configuration
+- Configure environment variables for production and development.
+- Customize logging and error handling as needed.
+
+### API Testing
+- Use Postman or similar tools to test each endpoint.
+- Ensure JWT tokens are included in protected route calls.
+
+### Contribution Guidelines
+- Fork the repository and create feature branches.
+- Write tests and follow coding standards before submitting a pull request.
+
+### Deployment
+- Merge latest changes before deployment.
+- Configure environment variables on the production server as in the Setup section.
